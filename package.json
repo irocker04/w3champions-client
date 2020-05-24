@@ -2,12 +2,12 @@
   "name": "w3champions-client",
   "version": "1.0.0",
   "description": "",
-  "main": "launcher-main.js",
+  "main": "launcher/launcher-main.js",
   "scripts": {
     "start": "http-server -p 8080",
-    "launcher-dev": "nodemon launcher-main.js dev",
-    "patch-dev": "nodemon patch.js",
-    "patch": "node patch.js"
+    "launcher-dev": "nodemon launcher/launcher-main.js dev",
+    "patch-dev": "nodemon patcher/patch.js",
+    "patch": "node patcher/patch.js"
   },
   "repository": {
     "type": "git",

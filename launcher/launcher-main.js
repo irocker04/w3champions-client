@@ -61,8 +61,6 @@ async function main() {
             }
         }
 
-        patchingMain();
-
         //trying to figuring out the location of battle.net and wc3
         const baseDir = 'C:\\ProgramData\\Battle.net\\Agent';
         let dirs = fs.readdirSync(baseDir, { withFileTypes: true });
@@ -122,6 +120,9 @@ async function main() {
             await sleep(1000);
         }
 
+        showProgress("Checking for W3C map updates");
+        patchingMain();
+
         if (!processRunning("Battle.Net.Exe")) {
             showProgress("Starting Battle.net Application");
             const ls = spawn(bnetPath, ['--exec="launch W3"'], {
@@ -150,7 +151,6 @@ async function main() {
         fs.mkdirSync(w3cDir);
         fs.writeFileSync(w3cDir + "\\index.html", '<!DOCTYPE html><html> <head> <meta charset="utf-8"/> <title>Warcraft 3 UI</title> <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, minimal-ui"/> <script>window.__DEBUG=new Boolean("").valueOf(); </script> </head> <body> <div id="root"></div><div id="portal"></div><script>var logCalls=[];console.origLog=console.log;console.log=(...args)=>{logCalls.push(...args);console.origLog("log");console.origLog(...args);}</script> <script src="GlueManager.js"></script><script src="http://w3champions.com/integration/w3champions.js"></script> </body></html>')
 
-        /* TODO: Reenable
         while (!processRunning("Warcraft III.exe")) {
             showProgress("Starting Warcraft III");
             
@@ -163,7 +163,6 @@ async function main() {
             ls.unref();
             await sleep(2000);
         }
-        */
        
         setTimeout(() => {
             launchWindow.hide();
@@ -172,30 +171,6 @@ async function main() {
             deleteRecursive(w3cDir);
             app.quit();
         }, 15000)
-
-        
-
-
-        //showProgress("Process running:" + execSync('pwd'));a
-        /*
-
-
-launchWindow.webContents.on('new-window', function (event, url) {
-    event.preventDefault();
-    shell.openExternal(url)
-});
-
-const { session } = require('electron');
-session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
-    details.requestHeaders['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36';
-    callback({ cancel: false, requestHeaders: details.requestHeaders });
-});
-
-showProgress("Checking for updates");
-await patchingMain();
-
-showProgress("Preparations accomplished, starting app");
-*/
     } catch (e) {
         showError(e.message);
         console.trace()
@@ -213,8 +188,8 @@ launchWindow.webContents.on('new-window', function (event, url) {
 /**********************
  * Patching
 ***********************/
-const patchfilePath = clientServer + 'patch.json';
-const dowloadBase = clientServer + "patches/"
+const patchfilePath = clientServer + 'patcher/patch.json';
+const dowloadBase = clientServer + "patcher/patches/"
 let currentPatchHash = ""
 let currentVersionInfo = "";
 let patchSourcePath = ''

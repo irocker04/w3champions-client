@@ -17,7 +17,7 @@ hashElement(patchPath, {
     version = folderHashes.hash;
     hashes = getHashes(folderHashes);
 
-    fs.writeFileSync('patch.json', JSON.stringify({
+    fs.writeFileSync('patcher/patch.json', JSON.stringify({
         version: version,
         hashes: hashes
     }));
