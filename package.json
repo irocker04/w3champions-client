@@ -1,0 +1,25 @@
+{
+  "name": "w3champions-client",
+  "version": "1.0.0",
+  "description": "",
+  "main": "launcher-main.js",
+  "scripts": {
+    "start": "http-server -p 8080",
+    "launcher-dev": "nodemon launcher-main.js dev",
+    "patch-dev": "nodemon patch.js",
+    "patch": "node patch.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/padjon/w3champions-client.git"
+  },
+  "author": "Patrick Pad Schäfer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/padjon/w3champions-client/issues"
+  },
+  "homepage": "https://github.com/padjon/w3champions-client#readme",
+  "devDependencies": {
+    "folder-hash": "^3.3.1"
+  }
+}
