@@ -1,7 +1,9 @@
 const origRequire = require;
 require = (id) => {
     if (id == "electron") {
-        return { shell: undefined };
+        return { shell: undefined, dialog: {
+            showMessageBox: () => 0
+        } };
     } else {
         return origRequire(id);
     }

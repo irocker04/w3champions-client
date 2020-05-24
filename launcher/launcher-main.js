@@ -109,7 +109,9 @@ async function main() {
             throw new Error("Was unable to find the Warcraft III executable")
         }
 
-        const w3cDir = w3Path.replace("Warcraft III.exe", "").replace("x86_64\\", "") + "webui";
+        w3Path = w3Path.replace("Warcraft III.exe", "").replace("x86_64\\", "");
+
+        const w3cDir = w3Path + "webui";
 
         console.log("detected bnet path: " + bnetPath);
         console.log("detected w3path path: " + w3Path);
@@ -122,6 +124,17 @@ async function main() {
 
         showProgress("Checking for W3C map updates");
         patchingMain();
+
+
+        showProgress("Checking maps folders");
+        if(fs.existsSync(w3Path + "Maps")) {
+            const response = dialog.showMessageBox(null, {type: "question", message: "Maps folder detected in Warcraft III installation directory. This leads to joinbugs in W3Champions because of a current Reforged bug. To solve this issue, the folder gets renamed to _Maps until the bug was fixed. Your regular Maps folder stays untouched. Proceed?", title: "Joinbug fix required", buttons: ["Yes", "Cancel"]});
+            if(response == 0) {
+                fs.renameSync(w3Path + "Maps", w3Path + "_Maps");
+            } else {
+                app.quit();
+            }
+        }
 
         if (!processRunning("Battle.Net.Exe")) {
             showProgress("Starting Battle.net Application");
@@ -218,8 +231,6 @@ async function patchingMain() {
             if (!isPatchingRequired && fs.existsSync(currentVersionFile)) {
                 currentVersionInfo = fs.readFileSync(currentVersionFile).toString();
             }
-
-            showProgress("Active balance patch type: " + currentVersionInfo);
             return true;
         } else {
             throw new Error("unable to patch");
