@@ -12,6 +12,9 @@ const electron = require('electron');
 const { dialog } = require('electron')
 const { spawn } = require('child_process');
 const http = require('http')
+const https = require('https');
+
+const restClient = (clientServer.indexOf('https:') === 0) ? https : http;
 
 let $workingDir = "";
 let $war3DocumentsDir = require('os').homedir() + path.sep + 'Documents' + path.sep + "Warcraft III" + path.sep;
@@ -32,8 +35,6 @@ if (!app.requestSingleInstanceLock()) {
 
 async function main() {
     try {
-        // TODO: REMOVE
-        
         $workingDir = execSync('chcp 65001 | echo %APPDATA%').toString().trim().replace(/\r?\n|\r/g, '');
         if (!fs.existsSync($workingDir)) {
             throw new Error("Was not able to determine the working directory. Please contact the support");
@@ -478,7 +479,7 @@ function cleanEmptyFoldersRecursively(folder) {
 
 function getWebContent(url, filestream = undefined) {
     return new Promise((resolve, reject) => {
-        http.get(url, (res) => {
+        restClient.get(url, (res) => {
             var body = '';
 
             if (res.statusCode != 200) {
@@ -506,7 +507,7 @@ function getWebContent(url, filestream = undefined) {
 
 function getBinaryWebContent(url) {
     return new Promise((resolve, reject) => {
-        http.get(url, (res) => {
+        restClient.get(url, (res) => {
             var data = [];
 
             if (res.statusCode != 200) {
