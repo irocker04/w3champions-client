@@ -140,6 +140,7 @@ async function main() {
         if (!processRunning("Battle.Net.Exe")) {
             showProgress("Starting Battle.net Application");
             const ls = spawn(bnetPath, ['--exec="launch W3"'], {
+		cwd:'c:\\',
                 detached: true,
                 stdio: 'ignore',
                 windowsVerbatimArguments: true
