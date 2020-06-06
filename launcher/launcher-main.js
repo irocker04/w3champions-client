@@ -88,12 +88,21 @@ async function main() {
                             }
                         }
 
-                        result = content.match(/"([^'"]*:[^"']*Warcraft III.exe)"/);
-                        if (result != null && result.length >= 2) {
-                            if (fs.existsSync(result[1])) {
-                                w3Path = result[1].replace(/\//g, "\\");
-                            }
-                        }
+                        result = content.match(/"([^'"]*:[^"']*_retail_[^"']*Warcraft III.exe)"/);
+			if(!w3Path) {
+	                        if (result != null && result.length >= 2) {
+        	                    if (fs.existsSync(result[1])) {
+                	                w3Path = result[1].replace(/\//g, "\\");
+	                            }
+                        	} else {
+		                        result = content.match(/"([^'"]*:[^"']*Warcraft III.exe)"/);
+        		                if (result != null && result.length >= 2) {
+                		            if (fs.existsSync(result[1])) {
+                        		        w3Path = result[1].replace(/\//g, "\\");
+		                            }
+        		                }
+				}
+			}
 
                         if (bnetPath && w3Path) {
                             break;
