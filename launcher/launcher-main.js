@@ -18,6 +18,10 @@ const restClient = (clientServer.indexOf('https:') === 0) ? https : http;
 
 let $workingDir = "";
 let $war3DocumentsDir = require('os').homedir() + path.sep + 'Documents' + path.sep + "Warcraft III" + path.sep;
+if(!fs.existsSync($war3DocumentsDir)) {
+    $war3DocumentsDir = app.getPath('documents') + path.sep + "Warcraft III" + path.sep;
+}
+
 let $war3MapsDir = $war3DocumentsDir + "Maps" + path.sep;
 let $w3cMapsDir = $war3DocumentsDir + "Maps" + path.sep + "W3Champions" + path.sep;
 
@@ -53,7 +57,7 @@ async function main() {
         }
 
         if(!fs.existsSync($war3DocumentsDir)) {
-            throw new Error("Was unable to detect your Warcraft III Maps folder.");
+		throw new Error("Was unable to detect your Warcraft III Maps folder. Searched in: " + $war3DocumentsDir);
         }
 
         for(const dir of [$war3MapsDir, $w3cMapsDir]) {
@@ -139,7 +143,7 @@ async function main() {
 
         if (!processRunning("Battle.Net.Exe")) {
             showProgress("Starting Battle.net Application");
-            const ls = spawn(bnetPath, ['--exec="launch W3"'], {
+            const ls = spawn(bnetPath, [], {
 		cwd:'c:\\',
                 detached: true,
                 stdio: 'ignore',
@@ -164,7 +168,7 @@ async function main() {
         }
 
         fs.mkdirSync(w3cDir);
-        fs.writeFileSync(w3cDir + "\\index.html", '<!DOCTYPE html><html> <head> <meta charset="utf-8"/> <title>Warcraft 3 UI</title> <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, minimal-ui"/> <script>window.__DEBUG=new Boolean("").valueOf(); </script> </head> <body> <div id="root"></div><div id="portal"></div><script>var logCalls=[];console.origLog=console.log;console.log=(...args)=>{logCalls.push(...args);console.origLog("log");console.origLog(...args);}</script> <script src="GlueManager.js"></script><script src="http://w3champions.com/integration/w3champions.js"></script> </body></html>')
+	fs.writeFileSync(w3cDir + "\\index.html", '<!DOCTYPE html><html> <head> <meta charset="utf-8"/> <title>Warcraft 3 UI</title> <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, minimal-ui"/> <script>window.__DEBUG=new Boolean("").valueOf(); </script> </head> <body> <div id="root"></div><div id="portal"></div><script>var logCalls=[];var w3cClientVersion = 1;console.origLog=console.log;console.log=(...args)=>{logCalls.push(...args);console.origLog("log");console.origLog(...args);}</script> <script src="GlueManager.js"></script><script src="http://w3champions.com/integration/w3champions.js"></script> </body></html>')
 
         while (!processRunning("Warcraft III.exe")) {
             showProgress("Starting Warcraft III");
@@ -176,7 +180,7 @@ async function main() {
                 windowsVerbatimArguments: true
             });
             ls.unref();
-            await sleep(2000);
+            await sleep(10000);
         }
        
         setTimeout(() => {
@@ -185,7 +189,7 @@ async function main() {
         setTimeout(() => {
             deleteRecursive(w3cDir);
             app.quit();
-        }, 15000)
+        }, 45000)
     } catch (e) {
         showError(e.message);
         console.trace()
