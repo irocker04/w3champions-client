@@ -6,6 +6,7 @@
   "scripts": {
     "start": "http-server -p 8080",
     "launcher-dev": "nodemon launcher/launcher-main.js dev",
+    "launcher-mac-dev": "nodemon launcher/launcher-mac.js dev",
     "patch-dev": "nodemon patcher/patch.js",
     "patch": "node patcher/patch.js"
   },
@@ -21,5 +22,9 @@
   "homepage": "https://github.com/padjon/w3champions-client#readme",
   "devDependencies": {
     "folder-hash": "^3.3.1"
+  },
+  "dependencies": {
+    "http-server": "^0.12.3",
+    "nodemon": "^2.0.4"
   }
 }
